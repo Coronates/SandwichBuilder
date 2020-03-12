@@ -1,5 +1,5 @@
 import React from "react";
-import Button from '../../UI/Button/Button'
+import Button from "../../UI/Button/Button";
 
 const OrderSummary = props => {
   const summaryIngredients = Object.keys(props.ingredients).map(igKey => {
@@ -15,9 +15,16 @@ const OrderSummary = props => {
       <h3>Your Order </h3>
       <p>A delicious burguer with:</p>
       <ul>{summaryIngredients}</ul>
+      <p>
+        <strong>total price: {props.price.toFixed(2)}</strong>
+      </p>
       <p>continue to checkout?</p>
-      <Button btnType="Danger" clicked={props.cancelClicked}>CANCEL</Button>
-      <Button btnType="Success" clicked={props.continueClicked}>CONTINUE</Button>
+      <Button btnType="Danger" clicked={props.cancelClicked}>
+        CANCEL
+      </Button>
+      <Button btnType="Success" clicked={props.continueClicked}>
+        CONTINUE
+      </Button>
     </>
   );
 };
