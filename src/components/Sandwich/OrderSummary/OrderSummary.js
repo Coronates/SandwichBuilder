@@ -20,7 +20,7 @@ class OrderSummary extends Component {
     return (
       <>
         <h3>Your Order </h3>
-        <p>A delicious burguer with:</p>
+        <p>A delicious Sandwich with:</p>
         <ul>{summaryIngredients}</ul>
         <p>
           <strong>total price: {this.props.price.toFixed(2)}</strong>

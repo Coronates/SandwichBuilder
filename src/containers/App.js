@@ -1,15 +1,19 @@
 import React from "react";
 import Layout from "../containers/Layout/Layout";
-import BurguerBuilder from './BurguerBuilder/BurguerBuilder';
-
-
+import SandwichBuilder from "./SandwichBuilder/SandwichBuilder";
+import Checkout from "./Checkout/Checkout";
+import { Route, Switch } from "react-router";
+import Orders from "./Orders/Orders";
 
 function App() {
   return (
     <div className="App">
       <Layout>
-        <BurguerBuilder/>
-        
+        <Switch>
+          <Route path="/checkout" component={Checkout} />
+          <Route path="/orders" component={Orders}/>
+          <Route path="/" exact component={SandwichBuilder} />
+        </Switch>
       </Layout>
     </div>
   );

@@ -8,7 +8,7 @@ const MenuButton = props => {
       className={classes.Button}
       onClick={props.clicked}
     >
-      <img src={icon} alt="burguer icon for display sidedrawer"/>
+      <img src={icon} alt="Sandwich icon for display sidedrawer"/>
     </button>
   );
 };

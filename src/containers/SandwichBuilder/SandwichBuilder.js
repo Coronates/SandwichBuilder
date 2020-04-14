@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Burguer from "../../components/Burguer/Burguer";
-import BuildControls from "../../components/Burguer/BuildControls/BuildControls";
+import Sandwich from "../../components/Sandwich/Sandwich";
+import BuildControls from "../../components/Sandwich/BuildControls/BuildControls";
 import Modal from "../../components/UI/Modal/Modal";
-import OrderSummary from "../../components/Burguer/OrderSummary/OrderSummary";
+import OrderSummary from "../../components/Sandwich/OrderSummary/OrderSummary";
 import axios from "../../axios-orders";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
@@ -14,7 +14,7 @@ const INGREDIENT_PRICES = {
   bacon: 0.7
 };
 
-class BurguerBuilder extends Component {
+class SandwichBuilder extends Component {
   /*constructor(props) {
         super(props)
     
@@ -28,18 +28,21 @@ class BurguerBuilder extends Component {
     purchasable: false,
     purchasing: false,
     loading: false,
-    error:false
+    error: false
   };
   componentDidMount() {
+    console.log(this.props);
     axios
       .get("https://burguerbuilder1.firebaseio.com/ingredients.json")
       .then(response => {
+        console.log(response.data);
         this.setState({
           ingredients: response.data
         });
-      }).catch(error=>{
+      })
+      .catch(error => {
         this.setState({
-          error:true
+          error: true
         });
       });
   }
@@ -56,39 +59,20 @@ class BurguerBuilder extends Component {
   };
   continueHandler = () => {
     //alert("you continue!");
-    this.setState({
-      loading: true
+    const queryParams = [];
+    for (let i in this.state.ingredients) {
+      queryParams.push(
+        encodeURIComponent(i) +
+          "=" +
+          encodeURIComponent(this.state.ingredients[i])
+      );
+    }
+    queryParams.push("price=" + this.state.totalPrice);
+    const queryString = queryParams.join("&");
+    this.props.history.push({
+      pathname: "/checkout",
+      search: "?" + queryString
     });
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: "Andres Coronado",
-        address: {
-          street: "tttstreet",
-          zipCode: "251111",
-          country: "Polombia"
-        },
-        email: "a@test.com",
-        deliveryMethod: "fastest"
-      }
-    };
-    axios
-      .post("/orders.json", order)
-      .then(response => {
-        //console.log(response);
-        this.setState({
-          loading: false,
-          purchasing: false
-        });
-      })
-      .catch(error => {
-        //console.log(error);
-        this.setState({
-          loading: false,
-          purchasing: false
-        });
-      });
   };
 
   updatePurchase = ingredients => {
@@ -148,13 +132,16 @@ class BurguerBuilder extends Component {
 
     let orderSummary = null;
 
-    
-    let burguer = this.state.error?<p>Ingredients can't be loaded</p>:<Spinner />;
+    let sandwich = this.state.error ? (
+      <p>Ingredients can't be loaded</p>
+    ) : (
+      <Spinner />
+    );
 
     if (this.state.ingredients) {
-      burguer = (
+      sandwich = (
         <>
-          <Burguer ingredients={this.state.ingredients} />
+          <Sandwich ingredients={this.state.ingredients} />
           <BuildControls
             price={this.state.totalPrice}
             moreClicked={this.addIngredientHandler}
@@ -187,10 +174,10 @@ class BurguerBuilder extends Component {
         >
           {orderSummary}
         </Modal>
-        {burguer}
+        {sandwich}
       </>
     );
   }
 }
 
-export default withErrorHandler(BurguerBuilder, axios);
+export default withErrorHandler(SandwichBuilder, axios);
