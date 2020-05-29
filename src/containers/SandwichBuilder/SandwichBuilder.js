@@ -3,19 +3,23 @@ import Sandwich from "../../components/Sandwich/Sandwich";
 import BuildControls from "../../components/Sandwich/BuildControls/BuildControls";
 import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/Sandwich/OrderSummary/OrderSummary";
-import axios from "../../axios-orders";
 import Spinner from "../../components/UI/Spinner/Spinner";
+import axios from "../../axios-orders";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 //redux
 import { connect } from "react-redux";
-import * as actionTypes from "../../store/actions";
+import * as actionTypes from "../../store/actions/actionTypes";
+import * as actions from "../../store/actions/index";
 
 class SandwichBuilder extends Component {
   state = {
     purchasing: false,
-    loading: false,
-    error: false,
   };
+
+  componentDidMount() {
+    console.log(this.props);
+    this.props.onInitIngredient();
+  }
 
   purchaseHandler = () => {
     this.setState({
@@ -28,9 +32,8 @@ class SandwichBuilder extends Component {
     });
   };
   continueHandler = () => {
-    this.props.history.push({
-      pathname: "/checkout",
-    });
+    this.props.onInitPurchase();
+    this.props.history.push('/checkout');
   };
 
   updatePurchase = (ingredients) => {
@@ -54,7 +57,7 @@ class SandwichBuilder extends Component {
 
     let orderSummary = null;
 
-    let sandwich = this.state.error ? (
+    let sandwich = this.props.error ? (
       <p>Ingredients can't be loaded</p>
     ) : (
       <Spinner />
@@ -83,9 +86,6 @@ class SandwichBuilder extends Component {
         />
       );
     }
-    if (this.state.loading) {
-      orderSummary = <Spinner />;
-    }
 
     // {salad:true, meat:false ...}
     return (
@@ -103,22 +103,17 @@ class SandwichBuilder extends Component {
 }
 const mapStateToProps = (state) => {
   return {
-    ings: state.ingredients,
-    price: state.totalPrice,
+    ings: state.sandwichBuilder.ingredients,
+    price: state.sandwichBuilder.totalPrice,
+    error: state.sandwichBuilder.error,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    onIngredientAdded: (igName) =>
-      dispatch({
-        type: actionTypes.ADD_INGREDIENT,
-        ingredientName: igName,
-      }),
-    onIngredientRemoved: (igName) =>
-      dispatch({
-        type: actionTypes.REMOVE_INGREDIENT,
-        ingredientName: igName,
-      }),
+    onIngredientAdded: (igName) => dispatch(actions.addIngredient(igName)),
+    onIngredientRemoved: (igName) => dispatch(actions.removeIngredient(igName)),
+    onInitIngredient: () => dispatch(actions.initIngredients()),
+    onInitPurchase: () => dispatch(actions.purchaseInit()),
   };
 };
 export default connect(

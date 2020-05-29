@@ -4,6 +4,8 @@ import classes from "./ContactData.module.css";
 import axios from "../../../axios-orders";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import Input from "../../../components/UI/Forms/Input/Input";
+import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
+import * as actions from "../../../store/actions/index";
 
 //redux
 import { connect } from "react-redux";
@@ -90,7 +92,6 @@ class ContactData extends Component {
       },
     },
     formIsValid: false,
-    loading: false,
   };
   checkValidity = (value, rules) => {
     let isValid = true;
@@ -110,27 +111,13 @@ class ContactData extends Component {
         formElementIdentifier
       ].value;
     }
-    this.setState({
-      loading: true,
-    });
+
     const order = {
       ingredients: this.props.ings,
       price: this.props.price,
       orderData: formData,
     };
-    axios
-      .post("/orders.json", order)
-      .then((response) => {
-        this.setState({
-          loading: false,
-        });
-        this.props.history.push("/");
-      })
-      .catch((error) => {
-        this.setState({
-          loading: false,
-        });
-      });
+    this.props.onOrderSandwich(order);
   };
   userInputHandler = (event, inputID) => {
     //mutate inmmutability way
@@ -187,7 +174,7 @@ class ContactData extends Component {
         </Button>
       </form>
     );
-    if (this.state.loading) {
+    if (this.props.loading) {
       form = <Spinner />;
     }
     return (
@@ -200,9 +187,18 @@ class ContactData extends Component {
 }
 const mapStateToProps = (state) => {
   return {
-    ings: state.ingredients,
-    price: state.totalPrice,
+    ings: state.sandwichBuilder.ingredients,
+    price: state.sandwichBuilder.totalPrice,
+    loading: state.order.loading,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onOrderSandwich: (data) => dispatch(actions.purchaseSandwich(data)),
   };
 };
 
-export default connect(mapStateToProps)(ContactData);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(ContactData, axios));
