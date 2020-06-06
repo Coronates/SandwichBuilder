@@ -8,7 +8,6 @@ import axios from "../../axios-orders";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 //redux
 import { connect } from "react-redux";
-import * as actionTypes from "../../store/actions/actionTypes";
 import * as actions from "../../store/actions/index";
 
 class SandwichBuilder extends Component {
@@ -22,9 +21,14 @@ class SandwichBuilder extends Component {
   }
 
   purchaseHandler = () => {
-    this.setState({
-      purchasing: true,
-    });
+    if (this.props.isAuthenticated) {
+      this.setState({
+        purchasing: true,
+      });
+    } else {
+      this.props.onSetAuthRedirectPath("/checkout");
+      this.props.history.push("/auth");
+    }
   };
   purchaseCancelledHandler = () => {
     this.setState({
@@ -33,7 +37,7 @@ class SandwichBuilder extends Component {
   };
   continueHandler = () => {
     this.props.onInitPurchase();
-    this.props.history.push('/checkout');
+    this.props.history.push("/checkout");
   };
 
   updatePurchase = (ingredients) => {
@@ -74,6 +78,7 @@ class SandwichBuilder extends Component {
             disabled={disabledInfo}
             purchasable={this.updatePurchase(this.props.ings)}
             ordered={this.purchaseHandler}
+            isAuth={this.props.isAuthenticated}
           />
         </React.Fragment>
       );
@@ -106,6 +111,7 @@ const mapStateToProps = (state) => {
     ings: state.sandwichBuilder.ingredients,
     price: state.sandwichBuilder.totalPrice,
     error: state.sandwichBuilder.error,
+    isAuthenticated: state.authe.idToken !== null,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -114,6 +120,7 @@ const mapDispatchToProps = (dispatch) => {
     onIngredientRemoved: (igName) => dispatch(actions.removeIngredient(igName)),
     onInitIngredient: () => dispatch(actions.initIngredients()),
     onInitPurchase: () => dispatch(actions.purchaseInit()),
+    onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path)),
   };
 };
 export default connect(

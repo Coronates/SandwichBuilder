@@ -116,8 +116,9 @@ class ContactData extends Component {
       ingredients: this.props.ings,
       price: this.props.price,
       orderData: formData,
+      userId: this.props.userId,
     };
-    this.props.onOrderSandwich(order);
+    this.props.onOrderSandwich(order, this.props.token);
   };
   userInputHandler = (event, inputID) => {
     //mutate inmmutability way
@@ -190,11 +191,13 @@ const mapStateToProps = (state) => {
     ings: state.sandwichBuilder.ingredients,
     price: state.sandwichBuilder.totalPrice,
     loading: state.order.loading,
+    token: state.authe.idToken,
+    userId: state.authe.userId,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    onOrderSandwich: (data) => dispatch(actions.purchaseSandwich(data)),
+    onOrderSandwich: (data, token) => dispatch(actions.purchaseSandwich(data, token)),
   };
 };
 

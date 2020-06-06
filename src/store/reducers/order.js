@@ -1,5 +1,4 @@
 import * as actionTypes from "../actions/actionTypes";
-import { fetchOrders } from "../actions";
 
 const initialState = {
   orders: [],
