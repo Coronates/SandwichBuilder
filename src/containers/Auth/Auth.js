@@ -7,6 +7,8 @@ import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";
+//utility
+import { checkValidity } from "../../utility/utility";
 
 class Auth extends Component {
   state = {
@@ -49,29 +51,13 @@ class Auth extends Component {
     }
   }
 
-  checkValidity = (value, rules) => {
-    let isValid = true;
-    if (rules && rules.required) {
-      isValid = value.trim() !== "" && isValid;
-    }
-    if (rules && rules.minLength) {
-      isValid = value.length >= rules.minLength && isValid;
-    }
-    if (rules.isEmail) {
-      // eslint-disable-next-line
-      const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      isValid = pattern.test(value) && isValid;
-    }
-    return isValid;
-  };
-
   inputChangedHandler(event, controlName) {
     const updatedControls = {
       ...this.state.controls,
       [controlName]: {
         ...this.state.controls[controlName],
         value: event.target.value,
-        valid: this.checkValidity(
+        valid: checkValidity(
           event.target.value,
           this.state.controls[controlName].validation
         ),
@@ -124,8 +110,6 @@ class Auth extends Component {
     }
     let errorMsg = null;
     if (this.props.error) {
-      console.log(this.props.error.message);
-
       errorMsg = <p>{this.props.error.message}</p>;
     }
     let authRedirect = null;

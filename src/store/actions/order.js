@@ -25,7 +25,6 @@ export const purchaseSandwich = (orderData, token) => {
     axios
       .post("/orders.json?auth=" + token, orderData)
       .then((response) => {
-        //console.log(response.data);
         dispatch(purchaseSuccess(response.data.name, orderData));
       })
       .catch((error) => {
@@ -69,8 +68,6 @@ export const fetchOrders = (token, userId) => {
       .get("/orders.json" + params)
       .then((res) => {
         //RES is an objects not an array
-        console.log(res.data);
-
         const fetchOrders = [];
         for (const [key, value] of Object.entries(res.data)) {
           fetchOrders.push({

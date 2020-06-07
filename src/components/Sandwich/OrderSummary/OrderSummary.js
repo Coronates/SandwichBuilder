@@ -2,10 +2,6 @@ import React, { Component } from "react";
 import Button from "../../UI/Button/Button";
 
 class OrderSummary extends Component {
-  //lifecycle in order to re-render the modal only when necessary
-  componentWillUpdate(){
-    console.log('[orderSummary.js] willUpdate');
-  }
   render() {
     const summaryIngredients = Object.keys(this.props.ingredients).map(
       igKey => {

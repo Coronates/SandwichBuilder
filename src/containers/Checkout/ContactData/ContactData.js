@@ -6,6 +6,8 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 import Input from "../../../components/UI/Forms/Input/Input";
 import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
 import * as actions from "../../../store/actions/index";
+//utility
+import { checkValidity } from "../../../utility/utility";
 
 //redux
 import { connect } from "react-redux";
@@ -48,7 +50,7 @@ class ContactData extends Component {
         value: "",
         validation: {
           required: true,
-          zipLength: 5,
+          minLength: 5,
         },
         valid: false,
         touched: false,
@@ -75,6 +77,7 @@ class ContactData extends Component {
         value: "",
         validation: {
           required: true,
+          isEmail: true,
         },
         valid: false,
         touched: false,
@@ -93,16 +96,7 @@ class ContactData extends Component {
     },
     formIsValid: false,
   };
-  checkValidity = (value, rules) => {
-    let isValid = true;
-    if (rules && rules.required) {
-      isValid = value.trim() !== "" && isValid;
-    }
-    if (rules && rules.zipLength) {
-      isValid = value.length === rules.zipLength && isValid;
-    }
-    return isValid;
-  };
+
   orderHandler = (event) => {
     event.preventDefault();
     const formData = {};
@@ -131,7 +125,7 @@ class ContactData extends Component {
 
     updatedElement.value = event.target.value;
     //check validity of the field
-    updatedElement.valid = this.checkValidity(
+    updatedElement.valid = checkValidity(
       updatedElement.value,
       updatedElement.validation
     );
@@ -169,7 +163,6 @@ class ContactData extends Component {
             touched={element.config.touched}
           />
         ))}
-
         <Button btnType="Success" disabled={!this.state.formIsValid}>
           ORDER
         </Button>
@@ -197,7 +190,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    onOrderSandwich: (data, token) => dispatch(actions.purchaseSandwich(data, token)),
+    onOrderSandwich: (data, token) =>
+      dispatch(actions.purchaseSandwich(data, token)),
   };
 };
 

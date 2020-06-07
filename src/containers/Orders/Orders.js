@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Order from "../../components/Order/Order";
 import axios from "../../axios-orders";
-
 import { connect } from "react-redux";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import * as actions from "../../store/actions/index";
@@ -22,7 +21,6 @@ class Orders extends Component {
         />
       ));
     }
-    //console.log(this.props.orders);
     return <div>{orders}</div>;
   }
 }
