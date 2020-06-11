@@ -1,5 +1,5 @@
 import React from 'react';
-import sandwichLogo from '../../assets/images/food_burguer.png';
+import sandwichLogo from '../../assets/images/sandwichlogo.png';
 import classes from './Logo.module.css'
 
 const Logo = () => {

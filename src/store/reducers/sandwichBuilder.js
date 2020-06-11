@@ -9,8 +9,8 @@ const initialState = {
 const INGREDIENT_PRICES = {
   salad: 0.5,
   cheese: 0.3,
-  meat: 2,
-  bacon: 0.7,
+  jam: 2,
+  tomato: 0.7,
 };
 const addIngredient = (state, action) => {
   return {
@@ -41,9 +41,9 @@ const setIngredients = (state,action) => {
     ...state,
     ingredients: {
       salad: action.ingredients.salad,
-      bacon: action.ingredients.bacon,
+      tomato: action.ingredients.tomato,
       cheese: action.ingredients.cheese,
-      meat: action.ingredients.meat,
+      jam: action.ingredients.jam,
     },
     error: false,
     totalPrice: 5,

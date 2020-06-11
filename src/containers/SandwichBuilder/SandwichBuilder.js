@@ -10,7 +10,7 @@ import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
 
-class SandwichBuilder extends Component {
+export class SandwichBuilder extends Component {
   state = {
     purchasing: false,
   };
@@ -91,7 +91,7 @@ class SandwichBuilder extends Component {
       );
     }
 
-    // {salad:true, meat:false ...}
+    // {salad:true, jam:false ...}
     return (
       <React.Fragment>
         <Modal

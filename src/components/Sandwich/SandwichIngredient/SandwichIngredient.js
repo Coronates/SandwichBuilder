@@ -12,19 +12,17 @@ class SandwichIngredient extends Component {
       case "bread-top":
         ingredient = (
           <div className={styles.BreadTop}>
-            <div className={styles.Seeds1}></div>
-            <div className={styles.Seeds2}></div>
           </div>
         );
         break;
-      case "meat":
-        ingredient = <div className={styles.Meat}></div>;
+      case "jam":
+        ingredient = <div className={styles.Jam}></div>;
         break;
       case "cheese":
         ingredient = <div className={styles.Cheese}></div>;
         break;
-      case "bacon":
-        ingredient = <div className={styles.Bacon}></div>;
+      case "tomato":
+        ingredient = <div className={styles.Tomato}></div>;
         break;
       case "salad":
         ingredient = <div className={styles.Salad}></div>;
